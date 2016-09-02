@@ -1,0 +1,22 @@
+version: '2'
+services:
+  elasticsearch:
+    image: elasticsearch:latest
+    command: elasticsearch -Des.network.host=0.0.0.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  logstash:
+    image: 501965974906.dkr.ecr.us-east-1.amazonaws.com/renderedtext/elk-logstash:latest
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    ports:
+      - "5000:5000"
+    links:
+      - elasticsearch
+  kibana:
+    image: 501965974906.dkr.ecr.us-east-1.amazonaws.com/renderedtext/elk-kibana:latest
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
